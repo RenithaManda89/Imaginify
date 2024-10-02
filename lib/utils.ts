@@ -12,21 +12,36 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // ERROR HANDLER
-export const handleError = (error: unknown) => {
+// ERROR HANDLER
+export function handleError(error: unknown) {
   if (error instanceof Error) {
-    // This is a native JavaScript error (e.g., TypeError, RangeError)
-    console.error(error.message);
-    throw new Error(`Error: ${error.message}`);
+    console.error("Error:", error.message, "Stack:", error.stack);
+
+    // Check for specific MongoDB-related errors
+    if (error.message.includes("MongoDB connection failed")) {
+      console.error("Database connection error. Please check your connection string and network access.");
+      return; // Handle gracefully, but do not re-throw
+    }
+
+    if (error.message === "User not found") {
+      // Handle this error gracefully, maybe return a default value or display a user-friendly message
+      return; // Exit the function, no need to re-throw
+    }
+
+    throw new Error(`Error: ${error.message}`); // Re-throw for other critical errors
   } else if (typeof error === "string") {
-    // This is a string error message
-    console.error(error);
+    console.error("Error:", error);
     throw new Error(`Error: ${error}`);
   } else {
-    // This is an unknown type of error
-    console.error(error);
-    throw new Error(`Unknown error: ${JSON.stringify(error)}`);
+    console.error("Unexpected error type:", error);
+    throw new Error("An unexpected error occurred.");
   }
-};
+}
+
+
+
+
+
 
 // PLACEHOLDER LOADER - while image is transforming
 const shimmer = (w: number, h: number) => `

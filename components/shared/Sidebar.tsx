@@ -21,7 +21,7 @@ const Sidebar = () => {
           <SignedIn>
             <ul className="sidebar-nav_elements">
               {navLinks.slice(0, 6).map((link) => {
-                const isActive = link.route === pathname
+                const isActive = pathname.startsWith(link.route);
 
                 return (
                   <li key={link.route} className={`sidebar-nav_element group ${
@@ -40,12 +40,11 @@ const Sidebar = () => {
                   </li>
                 )
               })}
-              </ul>
-
+            </ul>
 
             <ul className="sidebar-nav_elements">
               {navLinks.slice(6).map((link) => {
-                const isActive = link.route === pathname
+                const isActive = link.route === pathname;
 
                 return (
                   <li key={link.route} className={`sidebar-nav_element group ${
@@ -66,7 +65,10 @@ const Sidebar = () => {
               })}
 
               <li className="flex-center cursor-pointer gap-2 p-4">
-                <UserButton afterSignOutUrl='/' showName />
+                <UserButton 
+                  afterSignOutUrl="/"  // Redirects to home page after sign out
+                  showName
+                />
               </li>
             </ul>
           </SignedIn>
@@ -82,4 +84,4 @@ const Sidebar = () => {
   )
 }
 
-export default Sidebar
+export default Sidebar;
